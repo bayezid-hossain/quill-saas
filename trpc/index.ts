@@ -3,6 +3,7 @@ import { privateProcedure, publicProcedure, router } from './trpc';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { db } from '@/db';
+import { UploadStatus } from '@prisma/client';
 export const appRouter = router({
   authCallback: publicProcedure.query(async () => {
     const { getUser } = getKindeServerSession();
@@ -42,6 +43,7 @@ export const appRouter = router({
       },
     });
   }),
+
   getFileUploadStatus: privateProcedure
     .input(z.object({ fileId: z.string() }))
     .query(async ({ input, ctx }) => {
@@ -51,9 +53,10 @@ export const appRouter = router({
           userId: ctx.userId,
         },
       });
-      if (!file) return { status: 'PENDING' as const };
+      if (!file) return { status: 'PENDING' };
       return { status: file.uploadStatus };
     }),
+
   getFile: privateProcedure
     .input(z.object({ key: z.string() }))
     .mutation(async ({ ctx, input }) => {
