@@ -160,7 +160,8 @@ const PdfRenderer = ({ url }: PdfRendererProps) => {
                   <Loader2 className="my-24 h-6 w-6 animate-spin" />
                 </div>
               }
-              onLoadError={() => {
+              onLoadError={(error) => {
+                console.log(error);
                 toast({
                   title: 'Error loading PDF',
                   description: 'Please try again later or refresh the page',
